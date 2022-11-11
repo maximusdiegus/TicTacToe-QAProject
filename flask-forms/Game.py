@@ -7,5 +7,5 @@ class Game:
     
     board: Board
     
-    def __init__ (self, board, firstPlayer, secondPlayer, playerTurn, move, gameStatus) -> None:
+    def __init__ (self, board, firstPlayer, secondPlayer, playerTurn, move, gameStatus):
         self.board = board
