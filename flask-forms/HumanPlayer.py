@@ -2,8 +2,14 @@ from IPlayer import IPlayer
 
 class HumanPlayer(IPlayer):
     
+    def __init__(self):
+        super().__init__()
+    
     def getSymbol(self):
-        pass
+        return self.symbol
     
     def getName(self):
-        pass
+        return self.name
+    
+    def getFirstOrSecondPlayer(self):
+        return self.firstOrSecond

@@ -7,18 +7,14 @@ class Board:
         self.dimX = dimX
         self.dimY = dimY
         self.board = [[Symbol.Dot.value for i in range(self.dimX)] for i in range(self.dimY)]
-        self.end = False
     
     def putSymbol(self, posX, posY, symbol):
-        for i in range(len(self.board)):
-            for j in range(len(self.board[i])):
-                if posX == i and posY == j:
-                    self.board[i][j] = symbol
-                    
-        if self.checkWin(symbol):
-            self.end = True
+        if self.board[posX][posY] == Symbol.Dot.value:
+            self.board[posX][posY] = symbol
+            return True
         else:
-            self.end = False
+            return False
+
         
                 
     def checkWin(self, symbol):
@@ -85,3 +81,10 @@ class Board:
             for j in range(len(self.board[i])):
                 print(self.board[i][j], end=" ")
             print("|")
+
+# testBoard = Board(3,3)
+# print(testBoard.putSymbol(0, 0, "x"))
+# print(testBoard.putSymbol(0, 1, "x"))
+# print(testBoard.putSymbol(0, 2, "x"))
+# print(testBoard.putSymbol(0, 2, "x"))
+# testBoard.printBoard()
