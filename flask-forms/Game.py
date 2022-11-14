@@ -10,41 +10,78 @@ class Game:
         
     def __init__ (self):
         self.board = Board(3,3)
-        self.firstPlayer = IPlayer()
-        self.secondPlayer = IPlayer()
+        self.firstPlayer = IPlayer("Player1", Symbol.Cross, 1)
+        self.secondPlayer = IPlayer("Player2", Symbol.Circle, 2)
         self.playerTurn = 1
-        '''self.move = move'''
         self.gameStatus = GameStatus.Start.value
         self.gameName = ""
         
-    def menu():
-        print("----------------")
-        print("| " + Strings.Menu + " |")
-        print("| " + Strings.MenuStartGame + " |")
-        print("| " + Strings.MenuLoadGame + " |")
-        print("| " + Strings.MenuExitGame + " |")
-        print("----------------")
+        
+        
+    def menu(self):
+        ans = True
+        while ans:
+            print("-----------------------")
+            print("| " + Strings.Menu.value + " |".rjust(15," "))
+            print("| "+ "-------------------" + " |")
+            print("|  " + Strings.MenuStartGame.value + " |")
+            print("|  " + Strings.MenuLoadGame.value + " |".rjust(7," "))
+            print("|  " + Strings.MenuExitGame.value + " |".rjust(7," "))
+            print("-----------------------")
+            print(Strings.SelectOption.value)
+            
+            inp = input()
+            
+            if inp == "1":
+                self.gameName = input(Strings.CreateGameName.value) 
+                self.firstPlayer.name = input(Strings.CreatePlayer1Name.value)
+                self.secondPlayer.name = input(Strings.CreatePlayer2Name.value)
+                self.gameStatus = GameStatus.InProgress.value
+                
+                while self.gameStatus == GameStatus.InProgress.value:
+                    self.board.printBoard()
+                    x = int(input(Strings.TypeDimensionX.value)) - 1
+                    y = int(input(Strings.TypeDimensionY.value)) - 1
+                    if self.playerTurn == 1:
+                        player = self.firstPlayer
+                        print(Strings.FirstPlayerPlays.value)
+                    else:
+                        player = self.secondPlayer
+                        print(Strings.FirstPlayerPlays.value)
+                    
+                    self.play(x, y, player)
+                    self.playerTurn = 2
+                
+                ans = input(Strings.SaveGameText.value)
+                if ans == "Y":
+                    self.saveGame(self.gameName)
+                
+            elif inp == "2":
+                self.gameName = input(Strings.CreateGameName.value)
+            elif inp == "3":
+                print(Strings.ExitMessage.value)
+                ans = False
+            else:
+                print(Strings.WrongOption.value)
+          
         
     def play(self, dimX, dimY, player):
         symbol = player.symbol
         notErrorMove = False
         
-        if self.gameStatus == GameStatus.Start.value:
-            self.setGameStatus(GameStatus.InProgress.value)
-        
         while notErrorMove == False:
-            notErrorMove = self.board.putSymbol(dimX, dimY, symbol)
+            notErrorMove = self.board.putSymbol(dimX, dimY, symbol.value)
             if notErrorMove == False:
                 Strings.ErrorPutSymbol.value
+                
+        checkWin = self.board.checkWin(symbol)
         
-        self.printCurrentBoard()
-        self.gameStatus = self.board.checkWin(symbol)
-        self.setPlayerTurn(2)
-        
-        if self.getGameStatus == True:
+        if checkWin == True:
             self.showWinMessage(player)
-        else:
-            self.setGameStatus
+            if player.firsOrSecond == 1:
+                self.gameStatus = GameStatus.FirstPlayerWin
+            else:
+                self.gameStatus = GameStatus.SecondPlayerWin
 
     def printCurrentBoard(self):
         self.board.printBoard()
@@ -106,3 +143,8 @@ class Game:
             print(Strings.ExceptionFileNotLoaded)
             print(e)
         
+        
+testGame = Game()
+testGame.menu()
+
+'''assert testGame.board.printBoard == [[".", ".", "."],[".", ".", "."],[".", ".", "."]]'''

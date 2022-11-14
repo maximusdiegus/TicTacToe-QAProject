@@ -9,7 +9,9 @@ class Board:
         self.board = [[Symbol.Dot.value for i in range(self.dimX)] for i in range(self.dimY)]
     
     def putSymbol(self, posX, posY, symbol):
-        if self.board[posX][posY] == Symbol.Dot.value:
+        if posX < 0 or posX > self.dimX or posY < 0 or posY > self.dimY:
+            return False
+        elif self.board[posX][posY] == Symbol.Dot.value:
             self.board[posX][posY] = symbol
             return True
         else:
